@@ -1,0 +1,17 @@
+title = "Koko"
+
+[postgres]
+host = "127.0.0.1"
+port = 1234
+user = "postgres"
+password = "postgres"
+dbname = "acdc_test"
+
+[root-user]
+username = "root"
+password = "114514"
+phone = "114514"
+
+[jwt-middleware]
+title = "JWT Middleware"
+key = "excited"
