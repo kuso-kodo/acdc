@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"encoding/json"
 	"github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/name1e5s/acdc/config"
@@ -21,24 +22,25 @@ func getJWTMiddleware(jwtAuthenticator JWTAuthenticator) (authMiddleware *jwt.Gi
 		MaxRefresh:  time.Hour * 24,
 		IdentityKey: "id",
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
-			if v, ok := data.(*model.User); ok {
+			if v, ok := data.(model.User); ok {
+				payload, err := json.Marshal(v)
+				if err != nil {
+					log.Panicln(err)
+				}
 				return jwt.MapClaims{
-					"username": v.UserName,
-					"phone":    v.Phone,
-					"role":     v.Role,
-					"user_id":  v.UserID,
+					"payload": string(payload),
 				}
 			}
 			return jwt.MapClaims{}
 		},
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
-			return &model.User{
-				UserID:   claims["user_id"].(uint),
-				UserName: claims["username"].(string),
-				Role:     claims["role"].(uint),
-				Phone:    claims["phone"].(string),
+			user := model.User{}
+			err := json.Unmarshal([]byte(claims["payload"].(string)), &user)
+			if err != nil {
+				log.Panicln(err)
 			}
+			return user
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
 			var authLoginRequest schema.AuthLoginRequestSchema
@@ -82,28 +84,28 @@ func JWTBaseAuthenticator() *jwt.GinJWTMiddleware {
 
 func JWTReceptionistAuthenticator() *jwt.GinJWTMiddleware {
 	return getJWTMiddleware(func(data interface{}, c *gin.Context) bool {
-		user := data.(*model.User)
+		user := data.(model.User)
 		return user.IsReceptionist()
 	})
 }
 
 func JWMaintainerAuthenticator() *jwt.GinJWTMiddleware {
 	return getJWTMiddleware(func(data interface{}, c *gin.Context) bool {
-		user := data.(*model.User)
+		user := data.(model.User)
 		return user.IsMaintainer()
 	})
 }
 
 func JWTAccountingAuthenticator() *jwt.GinJWTMiddleware {
 	return getJWTMiddleware(func(data interface{}, c *gin.Context) bool {
-		user := data.(*model.User)
+		user := data.(model.User)
 		return user.IsAccounting()
 	})
 }
 
 func JWTSuperUserAuthenticator() *jwt.GinJWTMiddleware {
 	return getJWTMiddleware(func(data interface{}, c *gin.Context) bool {
-		user := data.(*model.User)
+		user := data.(model.User)
 		return user.IsSuperUser()
 	})
 }

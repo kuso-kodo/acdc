@@ -8,4 +8,5 @@ import (
 func BindAPIRouters(router *gin.RouterGroup) {
 	apiV1 := router.Group("/v1")
 	apiV1.POST("/login", v1.Login)
+	v1.BindUserRouters(apiV1)
 }
