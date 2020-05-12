@@ -28,14 +28,13 @@ func GetDataBase() *gorm.DB {
 }
 
 func autoMigrate(db *gorm.DB) {
-	db.AutoMigrate(&model.User{})
+	db.AutoMigrate(&model.Admin{})
 
 	// Add our root user
-	db.Create(&model.User{
+	db.Create(&model.Admin{
 		UserName: config.GetConfig().RootUser.UserName,
 		Password: config.GetConfig().RootUser.Password,
 		Role:     model.SuperUserMask,
-		Phone:    config.GetConfig().RootUser.Phone,
 	})
 }
 

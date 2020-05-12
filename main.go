@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/name1e5s/acdc/api"
-	v1 "github.com/name1e5s/acdc/api/v1"
+	v1 "github.com/name1e5s/acdc/api/admin"
 	"github.com/name1e5s/acdc/config"
 	"github.com/name1e5s/acdc/db"
 	_ "github.com/name1e5s/acdc/docs"
@@ -25,7 +25,7 @@ import (
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host localhost:8080
-// @BasePath /api/v1
+// @BasePath /api
 // @query.collection.format multi
 
 // @securityDefinitions.apikey ApiKeyAuth

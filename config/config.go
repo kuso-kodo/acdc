@@ -29,7 +29,6 @@ type postgresConfig struct {
 type rootUserConfig struct {
 	UserName string
 	Password string
-	Phone    string
 }
 
 type jwtConfig struct {

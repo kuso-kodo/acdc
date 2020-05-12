@@ -1,22 +1,33 @@
-basePath: /api/v1
+basePath: /api
 definitions:
-  model.User:
+  model.Admin:
     properties:
-      phone:
-        type: string
+      role:
+        type: integer
       user_id:
         type: integer
       username:
         type: string
     type: object
-  schema.AuthLoginRequestSchema:
+  schema.AddNewAdminRequest:
     properties:
       password:
         type: string
-      phone:
+      role:
+        type: integer
+      username:
         type: string
     type: object
-  schema.AuthLoginResponseSchema:
+  schema.AddNewAdminResponse:
+    $ref: '#/definitions/schema.CommonFailureSchema'
+  schema.AuthLoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  schema.AuthLoginResponse:
     properties:
       code:
         type: integer
@@ -32,6 +43,13 @@ definitions:
       message:
         type: string
     type: object
+  schema.DeleteAdminRequest:
+    properties:
+      username:
+        type: string
+    type: object
+  schema.DeleteAdminResponse:
+    $ref: '#/definitions/schema.CommonFailureSchema'
 host: localhost:8080
 info:
   contact:
@@ -46,7 +64,7 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
-  /login:
+  /admin/login:
     post:
       consumes:
         - application/json
@@ -56,20 +74,36 @@ paths:
           name: userRequest
           required: true
           schema:
-            $ref: '#/definitions/schema.AuthLoginRequestSchema'
+            $ref: '#/definitions/schema.AuthLoginRequest'
       produces:
         - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/schema.AuthLoginResponseSchema'
+            $ref: '#/definitions/schema.AuthLoginResponse'
         "401":
           description: Unauthorized
           schema:
             $ref: '#/definitions/schema.CommonFailureSchema'
       summary: Perform login.
-  /user/all:
+  /admin/me:
+    get:
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Admin'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonFailureSchema'
+      security:
+        - ApiKeyAuth: []
+      summary: Get current user info.
+  /admin/user/all:
     get:
       produces:
         - application/json
@@ -78,11 +112,65 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.User'
+              $ref: '#/definitions/model.Admin'
             type: array
       security:
         - ApiKeyAuth: []
       summary: List all users.
+  /admin/user/delete:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: User request
+          in: body
+          name: userInfo
+          required: true
+          schema:
+            $ref: '#/definitions/schema.DeleteAdminRequest'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.DeleteAdminResponse'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/schema.DeleteAdminResponse'
+      security:
+        - ApiKeyAuth: []
+      summary: Delete a user.
+  /admin/user/new:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: User request
+          in: body
+          name: userRequest
+          required: true
+          schema:
+            $ref: '#/definitions/schema.AddNewAdminRequest'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.AddNewAdminResponse'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/schema.AddNewAdminResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/schema.AddNewAdminResponse'
+      security:
+        - ApiKeyAuth: []
+      summary: Add a new user.
 securityDefinitions:
   ApiKeyAuth:
     in: header

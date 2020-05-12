@@ -16,9 +16,9 @@
     "version": "1.0"
   },
   "host": "localhost:8080",
-  "basePath": "/api/v1",
+  "basePath": "/api",
   "paths": {
-    "/login": {
+    "/admin/login": {
       "post": {
         "consumes": [
           "application/json"
@@ -34,7 +34,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/schema.AuthLoginRequestSchema"
+              "$ref": "#/definitions/schema.AuthLoginRequest"
             }
           }
         ],
@@ -42,7 +42,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/schema.AuthLoginResponseSchema"
+              "$ref": "#/definitions/schema.AuthLoginResponse"
             }
           },
           "401": {
@@ -54,7 +54,34 @@
         }
       }
     },
-    "/user/all": {
+    "/admin/me": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Get current user info.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/model.Admin"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonFailureSchema"
+            }
+          }
+        }
+      }
+    },
+    "/admin/user/all": {
       "get": {
         "security": [
           {
@@ -71,8 +98,96 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/model.User"
+                "$ref": "#/definitions/model.Admin"
               }
+            }
+          }
+        }
+      }
+    },
+    "/admin/user/delete": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Delete a user.",
+        "parameters": [
+          {
+            "description": "User request",
+            "name": "userInfo",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/schema.DeleteAdminRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/schema.DeleteAdminResponse"
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "schema": {
+              "$ref": "#/definitions/schema.DeleteAdminResponse"
+            }
+          }
+        }
+      }
+    },
+    "/admin/user/new": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Add a new user.",
+        "parameters": [
+          {
+            "description": "User request",
+            "name": "userRequest",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/schema.AddNewAdminRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/schema.AddNewAdminResponse"
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "schema": {
+              "$ref": "#/definitions/schema.AddNewAdminResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/schema.AddNewAdminResponse"
             }
           }
         }
@@ -80,11 +195,11 @@
     }
   },
   "definitions": {
-    "model.User": {
+    "model.Admin": {
       "type": "object",
       "properties": {
-        "phone": {
-          "type": "string"
+        "role": {
+          "type": "integer"
         },
         "user_id": {
           "type": "integer"
@@ -94,18 +209,35 @@
         }
       }
     },
-    "schema.AuthLoginRequestSchema": {
+    "schema.AddNewAdminRequest": {
       "type": "object",
       "properties": {
         "password": {
           "type": "string"
         },
-        "phone": {
+        "role": {
+          "type": "integer"
+        },
+        "username": {
           "type": "string"
         }
       }
     },
-    "schema.AuthLoginResponseSchema": {
+    "schema.AddNewAdminResponse": {
+      "$ref": "#/definitions/schema.CommonFailureSchema"
+    },
+    "schema.AuthLoginRequest": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "schema.AuthLoginResponse": {
       "type": "object",
       "properties": {
         "code": {
@@ -129,6 +261,17 @@
           "type": "string"
         }
       }
+    },
+    "schema.DeleteAdminRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "schema.DeleteAdminResponse": {
+      "$ref": "#/definitions/schema.CommonFailureSchema"
     }
   },
   "securityDefinitions": {

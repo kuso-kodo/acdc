@@ -10,7 +10,6 @@ dbname = "acdc_test"
 [root-user]
 username = "root"
 password = "114514"
-phone = "114514"
 
 [jwt-middleware]
 title = "JWT Middleware"
