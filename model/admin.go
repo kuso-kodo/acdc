@@ -16,62 +16,62 @@ const (
 	InvalidMask
 )
 
-func (user Admin) GetUserRole() []string {
+func (admin Admin) GetUserRole() []string {
 	var result []string
-	if user.Role&CustomerMask != 0 {
+	if admin.Role&CustomerMask != 0 {
 		result = append(result, "customer")
 	}
-	if user.Role&ReceptionistMask != 0 {
+	if admin.Role&ReceptionistMask != 0 {
 		result = append(result, "receptionist")
 	}
-	if user.Role&MaintainerMask != 0 {
+	if admin.Role&MaintainerMask != 0 {
 		result = append(result, "maintainer")
 	}
-	if user.Role&AccountingMask != 0 {
+	if admin.Role&AccountingMask != 0 {
 		result = append(result, "accounting")
 	}
-	if user.Role&SuperUserMask != 0 {
+	if admin.Role&SuperUserMask != 0 {
 		result = append(result, "superuser")
 	}
 	return result
 }
 
-func (user *Admin) IsCustomer() bool {
-	return user.Role&CustomerMask != 0
+func (admin *Admin) IsCustomer() bool {
+	return admin.Role&CustomerMask != 0
 }
 
-func (user *Admin) IsReceptionist() bool {
-	return user.Role&ReceptionistMask != 0
+func (admin *Admin) IsReceptionist() bool {
+	return admin.Role&ReceptionistMask != 0
 }
 
-func (user *Admin) IsMaintainer() bool {
-	return user.Role&MaintainerMask != 0
+func (admin *Admin) IsMaintainer() bool {
+	return admin.Role&MaintainerMask != 0
 }
 
-func (user *Admin) IsAccounting() bool {
-	return user.Role&AccountingMask != 0
+func (admin *Admin) IsAccounting() bool {
+	return admin.Role&AccountingMask != 0
 }
 
-func (user *Admin) IsSuperUser() bool {
-	return user.Role&SuperUserMask != 0
+func (admin *Admin) IsSuperUser() bool {
+	return admin.Role&SuperUserMask != 0
 }
 
-func (user *Admin) SetAsCustomer() {
-	user.Role |= CustomerMask
+func (admin *Admin) SetAsCustomer() {
+	admin.Role |= CustomerMask
 }
 
-func (user *Admin) SetAsReceptionist() {
-	user.Role |= ReceptionistMask
+func (admin *Admin) SetAsReceptionist() {
+	admin.Role |= ReceptionistMask
 }
 
-func (user *Admin) SetAsMaintainer() {
-	user.Role |= MaintainerMask
+func (admin *Admin) SetAsMaintainer() {
+	admin.Role |= MaintainerMask
 }
 
-func (user *Admin) SetAsAccounting() {
-	user.Role |= AccountingMask
+func (admin *Admin) SetAsAccounting() {
+	admin.Role |= AccountingMask
 }
 
-func (user *Admin) SetAsSuperUser() {
-	user.Role |= SuperUserMask
+func (admin *Admin) SetAsSuperUser() {
+	admin.Role |= SuperUserMask
 }

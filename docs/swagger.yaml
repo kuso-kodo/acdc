@@ -52,31 +52,28 @@ definitions:
     $ref: '#/definitions/schema.CommonFailureSchema'
 host: localhost:8080
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
-  description: This is a sample server celler server.
+  contact: {}
+  description: Simple API Server.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
-  title: Swagger Example API
+  title: 305E API
   version: "1.0"
 paths:
   /admin/login:
     post:
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - description: User request
-          in: body
-          name: userRequest
-          required: true
-          schema:
-            $ref: '#/definitions/schema.AuthLoginRequest'
+      - description: User request
+        in: body
+        name: userRequest
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AuthLoginRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -90,7 +87,7 @@ paths:
   /admin/me:
     get:
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -101,12 +98,12 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonFailureSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Get current user info.
   /admin/user/all:
     get:
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -115,21 +112,21 @@ paths:
               $ref: '#/definitions/model.Admin'
             type: array
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: List all users.
   /admin/user/delete:
     post:
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - description: User request
-          in: body
-          name: userInfo
-          required: true
-          schema:
-            $ref: '#/definitions/schema.DeleteAdminRequest'
+      - description: User request
+        in: body
+        name: userInfo
+        required: true
+        schema:
+          $ref: '#/definitions/schema.DeleteAdminRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -140,21 +137,21 @@ paths:
           schema:
             $ref: '#/definitions/schema.DeleteAdminResponse'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Delete a user.
   /admin/user/new:
     post:
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - description: User request
-          in: body
-          name: userRequest
-          required: true
-          schema:
-            $ref: '#/definitions/schema.AddNewAdminRequest'
+      - description: User request
+        in: body
+        name: userRequest
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AddNewAdminRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -169,7 +166,7 @@ paths:
           schema:
             $ref: '#/definitions/schema.AddNewAdminResponse'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Add a new user.
 securityDefinitions:
   ApiKeyAuth:

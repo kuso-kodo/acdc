@@ -1,284 +1,280 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "description": "This is a sample server celler server.",
-    "title": "Swagger Example API",
-    "termsOfService": "http://swagger.io/terms/",
-    "contact": {
-      "name": "API Support",
-      "url": "http://www.swagger.io/support",
-      "email": "support@swagger.io"
+    "swagger": "2.0",
+    "info": {
+        "description": "Simple API Server.",
+        "title": "305E API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {},
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
     },
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-    },
-    "version": "1.0"
-  },
-  "host": "localhost:8080",
-  "basePath": "/api",
-  "paths": {
-    "/admin/login": {
-      "post": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "summary": "Perform login.",
-        "parameters": [
-          {
-            "description": "User request",
-            "name": "userRequest",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/schema.AuthLoginRequest"
+    "host": "localhost:8080",
+    "basePath": "/api",
+    "paths": {
+        "/admin/login": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Perform login.",
+                "parameters": [
+                    {
+                        "description": "User request",
+                        "name": "userRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.AuthLoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schema.AuthLoginResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schema.CommonFailureSchema"
+                        }
+                    }
+                }
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/schema.AuthLoginResponse"
+        },
+        "/admin/me": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get current user info.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Admin"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schema.CommonFailureSchema"
+                        }
+                    }
+                }
             }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/schema.CommonFailureSchema"
+        },
+        "/admin/user/all": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List all users.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Admin"
+                            }
+                        }
+                    }
+                }
             }
-          }
+        },
+        "/admin/user/delete": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete a user.",
+                "parameters": [
+                    {
+                        "description": "User request",
+                        "name": "userInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.DeleteAdminRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schema.DeleteAdminResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable",
+                        "schema": {
+                            "$ref": "#/definitions/schema.DeleteAdminResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/new": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Add a new user.",
+                "parameters": [
+                    {
+                        "description": "User request",
+                        "name": "userRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.AddNewAdminRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schema.AddNewAdminResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable",
+                        "schema": {
+                            "$ref": "#/definitions/schema.AddNewAdminResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/schema.AddNewAdminResponse"
+                        }
+                    }
+                }
+            }
         }
-      }
     },
-    "/admin/me": {
-      "get": {
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "summary": "Get current user info.",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/model.Admin"
+    "definitions": {
+        "model.Admin": {
+            "type": "object",
+            "properties": {
+                "role": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
             }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/schema.CommonFailureSchema"
+        },
+        "schema.AddNewAdminRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
             }
-          }
+        },
+        "schema.AddNewAdminResponse": {
+            "$ref": "#/definitions/schema.CommonFailureSchema"
+        },
+        "schema.AuthLoginRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.AuthLoginResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "expire": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.CommonFailureSchema": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.DeleteAdminRequest": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.DeleteAdminResponse": {
+            "$ref": "#/definitions/schema.CommonFailureSchema"
         }
-      }
     },
-    "/admin/user/all": {
-      "get": {
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "summary": "List all users.",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/model.Admin"
-              }
-            }
-          }
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
-      }
-    },
-    "/admin/user/delete": {
-      "post": {
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "summary": "Delete a user.",
-        "parameters": [
-          {
-            "description": "User request",
-            "name": "userInfo",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/schema.DeleteAdminRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/schema.DeleteAdminResponse"
-            }
-          },
-          "406": {
-            "description": "Not Acceptable",
-            "schema": {
-              "$ref": "#/definitions/schema.DeleteAdminResponse"
-            }
-          }
-        }
-      }
-    },
-    "/admin/user/new": {
-      "post": {
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "summary": "Add a new user.",
-        "parameters": [
-          {
-            "description": "User request",
-            "name": "userRequest",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/schema.AddNewAdminRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/schema.AddNewAdminResponse"
-            }
-          },
-          "406": {
-            "description": "Not Acceptable",
-            "schema": {
-              "$ref": "#/definitions/schema.AddNewAdminResponse"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "schema": {
-              "$ref": "#/definitions/schema.AddNewAdminResponse"
-            }
-          }
-        }
-      }
     }
-  },
-  "definitions": {
-    "model.Admin": {
-      "type": "object",
-      "properties": {
-        "role": {
-          "type": "integer"
-        },
-        "user_id": {
-          "type": "integer"
-        },
-        "username": {
-          "type": "string"
-        }
-      }
-    },
-    "schema.AddNewAdminRequest": {
-      "type": "object",
-      "properties": {
-        "password": {
-          "type": "string"
-        },
-        "role": {
-          "type": "integer"
-        },
-        "username": {
-          "type": "string"
-        }
-      }
-    },
-    "schema.AddNewAdminResponse": {
-      "$ref": "#/definitions/schema.CommonFailureSchema"
-    },
-    "schema.AuthLoginRequest": {
-      "type": "object",
-      "properties": {
-        "password": {
-          "type": "string"
-        },
-        "username": {
-          "type": "string"
-        }
-      }
-    },
-    "schema.AuthLoginResponse": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "integer"
-        },
-        "expire": {
-          "type": "string"
-        },
-        "token": {
-          "type": "string"
-        }
-      }
-    },
-    "schema.CommonFailureSchema": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "integer"
-        },
-        "message": {
-          "type": "string"
-        }
-      }
-    },
-    "schema.DeleteAdminRequest": {
-      "type": "object",
-      "properties": {
-        "username": {
-          "type": "string"
-        }
-      }
-    },
-    "schema.DeleteAdminResponse": {
-      "$ref": "#/definitions/schema.CommonFailureSchema"
-    }
-  },
-  "securityDefinitions": {
-    "ApiKeyAuth": {
-      "type": "apiKey",
-      "name": "Authorization",
-      "in": "header"
-    }
-  }
 }

@@ -16,7 +16,7 @@ import (
 // @Produce json
 // @Success 200 {array} model.Admin
 // @Router /admin/user/all [get]
-func GetAllUsers(c *gin.Context) {
+func GetAllAdmin(c *gin.Context) {
 	var users []model.Admin
 	db.GetDataBase().Find(&users)
 	c.JSON(http.StatusOK, users)
@@ -31,7 +31,7 @@ func GetAllUsers(c *gin.Context) {
 // @Failure 406 {object} schema.AddNewAdminResponse
 // @Failure 500 {object} schema.AddNewAdminResponse
 // @Router /admin/user/new [post]
-func CreateNewUser(c *gin.Context) {
+func CreateNewAdmin(c *gin.Context) {
 	var adminRequest schema.AddNewAdminRequest
 	if err := c.ShouldBind(&adminRequest); err != nil {
 		schema.NewCommonFailureSchema(c, http.StatusNotAcceptable, "Incomplete user information.")
@@ -64,7 +64,7 @@ func CreateNewUser(c *gin.Context) {
 // @Success 200 {object} schema.DeleteAdminResponse
 // @Failure 406 {object} schema.DeleteAdminResponse
 // @Router /admin/user/delete [post]
-func DeleteUser(c *gin.Context) {
+func DeleteAdmin(c *gin.Context) {
 	var userInfo schema.DeleteAdminRequest
 	if err := c.BindJSON(&userInfo); err != nil {
 		schema.NewCommonFailureSchema(c, http.StatusNotAcceptable, "Incomplete user information.")
@@ -80,7 +80,7 @@ func DeleteUser(c *gin.Context) {
 // @Success 200 {object} model.Admin
 // @Failure 401 {object} schema.CommonFailureSchema
 // @Router /admin/me [get]
-func GetCurrentUser(c *gin.Context) {
+func GetCurrentAdmin(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	user := model.Admin{}
 	err := json.Unmarshal([]byte(claims["payload"].(string)), &user)
@@ -94,8 +94,8 @@ func GetCurrentUser(c *gin.Context) {
 func BindUserRouters(router *gin.RouterGroup) {
 	user := router.Group("/user")
 	user.Use(middleware.JWTSuperUserAuthenticator().MiddlewareFunc())
-	user.GET("/all", GetAllUsers)
-	user.POST("/new", CreateNewUser)
-	user.POST("/delete", DeleteUser)
-	router.GET("/me", middleware.JWTBaseAuthenticator().MiddlewareFunc(), GetCurrentUser)
+	user.GET("/all", GetAllAdmin)
+	user.POST("/new", CreateNewAdmin)
+	user.POST("/delete", DeleteAdmin)
+	router.GET("/me", middleware.JWTBaseAuthenticator().MiddlewareFunc(), GetCurrentAdmin)
 }

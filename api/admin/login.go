@@ -15,3 +15,7 @@ import (
 func Login(c *gin.Context) {
 	middleware.JWTBaseAuthenticator().LoginHandler(c)
 }
+
+func BindLoginRouters(router *gin.RouterGroup) {
+	router.POST("/login", Login)
+}
