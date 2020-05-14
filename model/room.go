@@ -11,5 +11,5 @@ type Room struct {
 	TargetTemperature  float32   `json:"target_temperature"`
 	FanSpeed           uint      `json:"fan_speed"`
 	LastOnTime         time.Time `json:"last_on"`
-	Tickets            []Ticket  `gorm:"foreignkey:RoomRefer;association_foreignkey:RoomID"`
+	Tickets            []Ticket  `json:"-" gorm:"foreignkey:RoomRefer;association_foreignkey:RoomID"`
 }

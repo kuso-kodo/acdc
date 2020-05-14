@@ -28,13 +28,12 @@ func GetAllAdmin(c *gin.Context) {
 // @Produce  json
 // @Param userRequest body schema.AddNewAdminRequest true "User request"
 // @Success 200 {object} schema.AddNewAdminResponse
-// @Failure 406 {object} schema.AddNewAdminResponse
-// @Failure 500 {object} schema.AddNewAdminResponse
+// @Failure 403 {object} schema.AddNewAdminResponse
 // @Router /admin/user/new [post]
 func CreateNewAdmin(c *gin.Context) {
 	var adminRequest schema.AddNewAdminRequest
 	if err := c.ShouldBind(&adminRequest); err != nil {
-		schema.NewCommonFailureSchema(c, http.StatusNotAcceptable, "Incomplete user information.")
+		schema.NewCommonFailureSchema(c, http.StatusForbidden, "Incomplete user information.")
 		return
 	}
 	adminModel := model.Admin{
@@ -48,7 +47,7 @@ func CreateNewAdmin(c *gin.Context) {
 	}
 	db.GetDataBase().Where(&adminModel).FirstOrInit(&user)
 	if user.Role == model.InvalidMask {
-		schema.NewCommonFailureSchema(c, http.StatusInternalServerError, "Create new user failed.")
+		schema.NewCommonFailureSchema(c, http.StatusForbidden, "Create new user failed.")
 		return
 	} else {
 		schema.NewCommonFailureSchema(c, http.StatusOK, "Done.")

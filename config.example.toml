@@ -14,3 +14,6 @@ password = "114514"
 [jwt-middleware]
 title = "JWT Middleware"
 key = "excited"
+
+[ticket]
+page_size = 20

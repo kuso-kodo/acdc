@@ -12,10 +12,11 @@ import (
 const configFilePath = "config.toml"
 
 type serverConfig struct {
-	Title     string
-	Postgres  postgresConfig `toml:"postgres"`
-	RootUser  rootUserConfig `toml:"root-user"`
-	JWTConfig jwtConfig      `toml:"jwt-middleware"`
+	Title        string
+	Postgres     postgresConfig `toml:"postgres"`
+	RootUser     rootUserConfig `toml:"root"`
+	JWTConfig    jwtConfig      `toml:"jwt"`
+	TicketConfig ticketConfig   `toml:"ticket"`
 }
 
 type postgresConfig struct {
@@ -34,6 +35,10 @@ type rootUserConfig struct {
 type jwtConfig struct {
 	Title string
 	Key   string
+}
+
+type ticketConfig struct {
+	PageSize int `toml:"page_size"`
 }
 
 func (cfg *postgresConfig) GetConnectionString() string {

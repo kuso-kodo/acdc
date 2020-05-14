@@ -9,6 +9,34 @@ definitions:
       username:
         type: string
     type: object
+  model.Ticket:
+    properties:
+      end_at:
+        type: string
+      fan_speed:
+        type: integer
+      paid:
+        type: boolean
+      service_count:
+        type: integer
+      start_at:
+        type: string
+      target_temperature:
+        type: number
+      ticket_id:
+        type: integer
+      total_fee:
+        type: number
+    type: object
+  model.User:
+    properties:
+      phone:
+        type: string
+      user_id:
+        type: integer
+      username:
+        type: string
+    type: object
   schema.AddNewAdminRequest:
     properties:
       password:
@@ -50,6 +78,15 @@ definitions:
     type: object
   schema.DeleteAdminResponse:
     $ref: '#/definitions/schema.CommonFailureSchema'
+  schema.UserRegisterRequest:
+    properties:
+      password:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -64,16 +101,16 @@ paths:
   /admin/login:
     post:
       consumes:
-      - application/json
+        - application/json
       parameters:
-      - description: User request
-        in: body
-        name: userRequest
-        required: true
-        schema:
-          $ref: '#/definitions/schema.AuthLoginRequest'
+        - description: User request
+          in: body
+          name: userRequest
+          required: true
+          schema:
+            $ref: '#/definitions/schema.AuthLoginRequest'
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -87,7 +124,7 @@ paths:
   /admin/me:
     get:
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -98,12 +135,12 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonFailureSchema'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Get current user info.
   /admin/user/all:
     get:
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -112,21 +149,21 @@ paths:
               $ref: '#/definitions/model.Admin'
             type: array
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: List all users.
   /admin/user/delete:
     post:
       consumes:
-      - application/json
+        - application/json
       parameters:
-      - description: User request
-        in: body
-        name: userInfo
-        required: true
-        schema:
-          $ref: '#/definitions/schema.DeleteAdminRequest'
+        - description: User request
+          in: body
+          name: userInfo
+          required: true
+          schema:
+            $ref: '#/definitions/schema.DeleteAdminRequest'
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -137,37 +174,171 @@ paths:
           schema:
             $ref: '#/definitions/schema.DeleteAdminResponse'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Delete a user.
   /admin/user/new:
     post:
       consumes:
-      - application/json
+        - application/json
       parameters:
-      - description: User request
-        in: body
-        name: userRequest
-        required: true
-        schema:
-          $ref: '#/definitions/schema.AddNewAdminRequest'
+        - description: User request
+          in: body
+          name: userRequest
+          required: true
+          schema:
+            $ref: '#/definitions/schema.AddNewAdminRequest'
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/schema.AddNewAdminResponse'
-        "406":
-          description: Not Acceptable
-          schema:
-            $ref: '#/definitions/schema.AddNewAdminResponse'
-        "500":
-          description: Internal Server Error
+        "403":
+          description: Forbidden
           schema:
             $ref: '#/definitions/schema.AddNewAdminResponse'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Add a new user.
+  /user/all:
+    get:
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+      security:
+        - ApiKeyAuth: []
+      summary: List all users.
+  /user/login:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: User request
+          in: body
+          name: userRequest
+          required: true
+          schema:
+            $ref: '#/definitions/schema.AuthLoginRequest'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.AuthLoginResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonFailureSchema'
+      summary: Perform login.
+  /user/me:
+    get:
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonFailureSchema'
+      security:
+        - ApiKeyAuth: []
+      summary: Get current user info.
+  /user/register:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: User request
+          in: body
+          name: userRequest
+          required: true
+          schema:
+            $ref: '#/definitions/schema.UserRegisterRequest'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.CommonFailureSchema'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonFailureSchema'
+      summary: Register a new user.
+  /user/ticket/all:
+    get:
+      parameters:
+        - description: Page Size
+          in: query
+          name: page_size
+          type: integer
+        - description: Page Count
+          in: query
+          name: offset
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Ticket'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonFailureSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonFailureSchema'
+      security:
+        - ApiKeyAuth: []
+      summary: List all tickets.
+  /user/ticket/unpaid:
+    get:
+      parameters:
+        - description: Page Size
+          in: query
+          name: page_size
+          type: integer
+        - description: Page Count
+          in: query
+          name: offset
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Ticket'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonFailureSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonFailureSchema'
+      security:
+        - ApiKeyAuth: []
+      summary: List all tickets.
 securityDefinitions:
   ApiKeyAuth:
     in: header

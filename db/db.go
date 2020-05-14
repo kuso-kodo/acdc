@@ -64,6 +64,7 @@ func autoMigrate(db *gorm.DB) {
 		FanSpeed:          0,
 		TotalFee:          0,
 		RoomRefer:         1,
+		UserRefer:         1,
 	})
 	var ticket []model.Ticket
 	var cnt int
