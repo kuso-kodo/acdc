@@ -77,6 +77,518 @@
         }
       }
     },
+    "/heartbeat": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Handle heartbeat.",
+        "parameters": [
+          {
+            "description": "Client request",
+            "name": "clientRequest",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/schema.ClientHeartBeatRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/schema.ClientHeartBeatResponse"
+            }
+          }
+        }
+      }
+    },
+    "/maintainer/config": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Get air config.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/config.AirConfig"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Set air config.",
+        "parameters": [
+          {
+            "description": "User request",
+            "name": "airConfig",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/config.AirConfig"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          }
+        }
+      }
+    },
+    "/maintainer/power/off": {
+      "post": {
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Dummy function, make our fucking teacher happy.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          }
+        }
+      }
+    },
+    "/maintainer/power/on": {
+      "post": {
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Dummy function, make our fucking teacher happy.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          }
+        }
+      }
+    },
+    "/maintainer/room": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "List all rooms.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/model.Room"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          }
+        }
+      }
+    },
+    "/receptionist/checkin": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Check in user.",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "User phone number",
+            "name": "phone",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "Room name",
+            "name": "room",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          }
+        }
+      }
+    },
+    "/receptionist/checkout": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Check out user.",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "User phone number",
+            "name": "phone",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          }
+        }
+      }
+    },
+    "/receptionist/ticket/all": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "List all tickets by user phone.",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "User phone number",
+            "name": "phone",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "Page Size",
+            "name": "page_size",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "Page Count",
+            "name": "offset",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/model.Ticket"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          }
+        }
+      }
+    },
+    "/receptionist/ticket/clear": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Clear all unpaid tickets.",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "User phone number",
+            "name": "phone",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          }
+        }
+      }
+    },
+    "/receptionist/ticket/fee": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "List total fee.",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "User phone number",
+            "name": "phone",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/schema.UserTotalFeeResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          }
+        }
+      }
+    },
+    "/receptionist/ticket/unpaid": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "List all tickets by user phone.",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "User phone number",
+            "name": "phone",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "Page Size",
+            "name": "page_size",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "Page Count",
+            "name": "offset",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/model.Ticket"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Register client.",
+        "parameters": [
+          {
+            "description": "Client request",
+            "name": "clientRequest",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/schema.ClientRegisterRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/schema.ClientRegisterResponse"
+            }
+          }
+        }
+      }
+    },
     "/superuser/all": {
       "get": {
         "security": [
@@ -203,6 +715,18 @@
                 "$ref": "#/definitions/model.User"
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
           }
         }
       }
@@ -263,6 +787,47 @@
           },
           "401": {
             "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          }
+        }
+      }
+    },
+    "/user/priority": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Set user priority.",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Priority Level",
+            "name": "level",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
             "schema": {
               "$ref": "#/definitions/schema.CommonStatusSchema"
             }
@@ -356,39 +921,6 @@
         }
       }
     },
-    "/user/ticket/clear": {
-      "post": {
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "summary": "List all unpaid tickets.",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/schema.CommonStatusSchema"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/schema.CommonStatusSchema"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "$ref": "#/definitions/schema.CommonStatusSchema"
-            }
-          }
-        }
-      }
-    },
     "/user/ticket/fee": {
       "get": {
         "security": [
@@ -399,7 +931,7 @@
         "produces": [
           "application/json"
         ],
-        "summary": "List all unpaid tickets.",
+        "summary": "List total fee.",
         "responses": {
           "200": {
             "description": "OK",
@@ -474,6 +1006,35 @@
     }
   },
   "definitions": {
+    "config.AirConfig": {
+      "type": "object",
+      "properties": {
+        "high_fan_speed_fee_rate": {
+          "type": "number"
+        },
+        "high_priority_factor": {
+          "type": "number"
+        },
+        "low_fan_speed_fee_rate": {
+          "type": "number"
+        },
+        "low_priority_factor": {
+          "type": "number"
+        },
+        "max_serve_size": {
+          "type": "integer"
+        },
+        "medium_fan_speed_fee_rate": {
+          "type": "number"
+        },
+        "medium_priority_factor": {
+          "type": "number"
+        },
+        "period": {
+          "type": "integer"
+        }
+      }
+    },
     "model.Admin": {
       "type": "object",
       "properties": {
@@ -485,6 +1046,35 @@
         },
         "username": {
           "type": "string"
+        }
+      }
+    },
+    "model.Room": {
+      "type": "object",
+      "properties": {
+        "current_temperature": {
+          "type": "number"
+        },
+        "fan_speed": {
+          "type": "integer"
+        },
+        "last_on": {
+          "type": "string"
+        },
+        "power_on": {
+          "type": "boolean"
+        },
+        "room_id": {
+          "type": "integer"
+        },
+        "room_name": {
+          "type": "string"
+        },
+        "servicing": {
+          "type": "boolean"
+        },
+        "target_temperature": {
+          "type": "number"
         }
       }
     },
@@ -506,9 +1096,6 @@
         "start_at": {
           "type": "string"
         },
-        "target_temperature": {
-          "type": "number"
-        },
         "ticket_id": {
           "type": "integer"
         },
@@ -522,6 +1109,9 @@
       "properties": {
         "phone": {
           "type": "string"
+        },
+        "priority": {
+          "type": "integer"
         },
         "user_id": {
           "type": "integer"
@@ -570,6 +1160,68 @@
         },
         "token": {
           "type": "string"
+        }
+      }
+    },
+    "schema.ClientHeartBeatRequest": {
+      "type": "object",
+      "properties": {
+        "current": {
+          "type": "number"
+        },
+        "mode": {
+          "type": "integer"
+        },
+        "power": {
+          "type": "boolean"
+        },
+        "room": {
+          "type": "string"
+        },
+        "target": {
+          "type": "number"
+        },
+        "wind": {
+          "type": "integer"
+        }
+      }
+    },
+    "schema.ClientHeartBeatResponse": {
+      "type": "object",
+      "properties": {
+        "cost": {
+          "type": "number"
+        },
+        "msg": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "wind": {
+          "type": "boolean"
+        }
+      }
+    },
+    "schema.ClientRegisterRequest": {
+      "type": "object",
+      "properties": {
+        "room": {
+          "type": "string"
+        }
+      }
+    },
+    "schema.ClientRegisterResponse": {
+      "type": "object",
+      "properties": {
+        "msg": {
+          "type": "string"
+        },
+        "period": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "boolean"
         }
       }
     },

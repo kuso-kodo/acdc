@@ -57,14 +57,13 @@ func autoMigrate(db *gorm.DB) {
 		LastOnTime:         time.Time{},
 	})
 	db.Create(&model.Ticket{
-		StartAt:           time.Now(),
-		EndAt:             time.Now(),
-		ServiceCount:      0,
-		TargetTemperature: 0,
-		FanSpeed:          0,
-		TotalFee:          0,
-		RoomRefer:         1,
-		UserRefer:         1,
+		StartAt:      time.Now(),
+		EndAt:        time.Now(),
+		ServiceCount: 0,
+		FanSpeed:     0,
+		TotalFee:     0,
+		RoomRefer:    1,
+		UserRefer:    1,
 	})
 	var ticket []model.Ticket
 	var cnt int

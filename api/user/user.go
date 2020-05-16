@@ -52,6 +52,8 @@ func Register(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce json
 // @Success 200 {array} model.User
+// @Failure 401 {object} schema.CommonStatusSchema
+// @Failure 403 {object} schema.CommonStatusSchema
 // @Router /user/all [get]
 func GetAllUser(c *gin.Context) {
 	var users []model.User

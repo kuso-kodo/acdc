@@ -1,5 +1,24 @@
 basePath: /api
 definitions:
+  config.AirConfig:
+    properties:
+      high_fan_speed_fee_rate:
+        type: number
+      high_priority_factor:
+        type: number
+      low_fan_speed_fee_rate:
+        type: number
+      low_priority_factor:
+        type: number
+      max_serve_size:
+        type: integer
+      medium_fan_speed_fee_rate:
+        type: number
+      medium_priority_factor:
+        type: number
+      period:
+        type: integer
+    type: object
   model.Admin:
     properties:
       role:
@@ -8,6 +27,25 @@ definitions:
         type: integer
       username:
         type: string
+    type: object
+  model.Room:
+    properties:
+      current_temperature:
+        type: number
+      fan_speed:
+        type: integer
+      last_on:
+        type: string
+      power_on:
+        type: boolean
+      room_id:
+        type: integer
+      room_name:
+        type: string
+      servicing:
+        type: boolean
+      target_temperature:
+        type: number
     type: object
   model.Ticket:
     properties:
@@ -21,8 +59,6 @@ definitions:
         type: integer
       start_at:
         type: string
-      target_temperature:
-        type: number
       ticket_id:
         type: integer
       total_fee:
@@ -32,6 +68,8 @@ definitions:
     properties:
       phone:
         type: string
+      priority:
+        type: integer
       user_id:
         type: integer
       username:
@@ -63,6 +101,46 @@ definitions:
         type: string
       token:
         type: string
+    type: object
+  schema.ClientHeartBeatRequest:
+    properties:
+      current:
+        type: number
+      mode:
+        type: integer
+      power:
+        type: boolean
+      room:
+        type: string
+      target:
+        type: number
+      wind:
+        type: integer
+    type: object
+  schema.ClientHeartBeatResponse:
+    properties:
+      cost:
+        type: number
+      msg:
+        type: string
+      status:
+        type: integer
+      wind:
+        type: boolean
+    type: object
+  schema.ClientRegisterRequest:
+    properties:
+      room:
+        type: string
+    type: object
+  schema.ClientRegisterResponse:
+    properties:
+      msg:
+        type: string
+      period:
+        type: integer
+      status:
+        type: boolean
     type: object
   schema.CommonStatusSchema:
     properties:
@@ -142,6 +220,324 @@ paths:
       security:
         - ApiKeyAuth: []
       summary: Get current user info.
+  /heartbeat:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: Client request
+          in: body
+          name: clientRequest
+          required: true
+          schema:
+            $ref: '#/definitions/schema.ClientHeartBeatRequest'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.ClientHeartBeatResponse'
+      summary: Handle heartbeat.
+  /maintainer/config:
+    get:
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/config.AirConfig'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+      security:
+        - ApiKeyAuth: []
+      summary: Get air config.
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: User request
+          in: body
+          name: airConfig
+          required: true
+          schema:
+            $ref: '#/definitions/config.AirConfig'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+      security:
+        - ApiKeyAuth: []
+      summary: Set air config.
+  /maintainer/power/off:
+    post:
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+      summary: Dummy function, make our fucking teacher happy.
+  /maintainer/power/on:
+    post:
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+      summary: Dummy function, make our fucking teacher happy.
+  /maintainer/room:
+    get:
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Room'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+      security:
+        - ApiKeyAuth: []
+      summary: List all rooms.
+  /receptionist/checkin:
+    post:
+      parameters:
+        - description: User phone number
+          in: query
+          name: phone
+          type: string
+        - description: Room name
+          in: query
+          name: room
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+      security:
+        - ApiKeyAuth: []
+      summary: Check in user.
+  /receptionist/checkout:
+    post:
+      parameters:
+        - description: User phone number
+          in: query
+          name: phone
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+      security:
+        - ApiKeyAuth: []
+      summary: Check out user.
+  /receptionist/ticket/all:
+    get:
+      parameters:
+        - description: User phone number
+          in: query
+          name: phone
+          type: string
+        - description: Page Size
+          in: query
+          name: page_size
+          type: integer
+        - description: Page Count
+          in: query
+          name: offset
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Ticket'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+      security:
+        - ApiKeyAuth: []
+      summary: List all tickets by user phone.
+  /receptionist/ticket/clear:
+    post:
+      parameters:
+        - description: User phone number
+          in: query
+          name: phone
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+      security:
+        - ApiKeyAuth: []
+      summary: Clear all unpaid tickets.
+  /receptionist/ticket/fee:
+    get:
+      parameters:
+        - description: User phone number
+          in: query
+          name: phone
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.UserTotalFeeResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+      security:
+        - ApiKeyAuth: []
+      summary: List total fee.
+  /receptionist/ticket/unpaid:
+    get:
+      parameters:
+        - description: User phone number
+          in: query
+          name: phone
+          type: string
+        - description: Page Size
+          in: query
+          name: page_size
+          type: integer
+        - description: Page Count
+          in: query
+          name: offset
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Ticket'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+      security:
+        - ApiKeyAuth: []
+      summary: List all tickets by user phone.
+  /register:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: Client request
+          in: body
+          name: clientRequest
+          required: true
+          schema:
+            $ref: '#/definitions/schema.ClientRegisterRequest'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.ClientRegisterResponse'
+      summary: Register client.
   /superuser/all:
     get:
       produces:
@@ -217,6 +613,14 @@ paths:
             items:
               $ref: '#/definitions/model.User'
             type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
       security:
         - ApiKeyAuth: []
       summary: List all users.
@@ -259,6 +663,31 @@ paths:
       security:
         - ApiKeyAuth: []
       summary: Get current user info.
+  /user/priority:
+    post:
+      parameters:
+        - description: Priority Level
+          in: query
+          name: level
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+      security:
+        - ApiKeyAuth: []
+      summary: Set user priority.
   /user/register:
     post:
       consumes:
@@ -313,26 +742,6 @@ paths:
       security:
         - ApiKeyAuth: []
       summary: List all tickets.
-  /user/ticket/clear:
-    post:
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/schema.CommonStatusSchema'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/schema.CommonStatusSchema'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/schema.CommonStatusSchema'
-      security:
-        - ApiKeyAuth: []
-      summary: List all unpaid tickets.
   /user/ticket/fee:
     get:
       produces:
@@ -352,7 +761,7 @@ paths:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
         - ApiKeyAuth: []
-      summary: List all unpaid tickets.
+      summary: List total fee.
   /user/ticket/unpaid:
     get:
       parameters:

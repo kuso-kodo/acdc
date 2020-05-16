@@ -41,3 +41,13 @@ func GetTotalFeeByUserID(c *gin.Context, userID uint) {
 	}
 	c.JSON(http.StatusOK, schema.UserTotalFeeResponse{Fee: result})
 }
+
+func GetTotalFeeByRoomID(roomID uint) float32 {
+	var tickets []model.Ticket
+	db.GetDataBase().Where("room_refer = ?", roomID).Where("paid = ?", false).Find(&tickets)
+	var result float32 = 0
+	for _, value := range tickets {
+		result += value.TotalFee
+	}
+	return result
+}

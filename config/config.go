@@ -17,6 +17,8 @@ type serverConfig struct {
 	RootUser     rootUserConfig `toml:"root"`
 	JWTConfig    jwtConfig      `toml:"jwt"`
 	TicketConfig ticketConfig   `toml:"ticket"`
+	HotelConfig  hotelConfig    `toml:"hotel"`
+	AirConfig    AirConfig      `toml:"air"`
 }
 
 type postgresConfig struct {
@@ -39,6 +41,21 @@ type jwtConfig struct {
 
 type ticketConfig struct {
 	PageSize int `toml:"page_size"`
+}
+
+type hotelConfig struct {
+	MaxRoom int `toml:"max_room"`
+}
+
+type AirConfig struct {
+	MaxServeSize          int     `toml:"max_serve_size" json:"max_serve_size"`
+	LowFanSpeedFeeRate    float32 `toml:"low_fan_speed_fee_rate" json:"low_fan_speed_fee_rate"`
+	MediumFanSpeedFeeRate float32 `toml:"medium_fan_speed_fee_rate" json:"medium_fan_speed_fee_rate"`
+	HighFanSpeedFeeRate   float32 `toml:"high_fan_speed_fee_rate" json:"high_fan_speed_fee_rate"`
+	LowPriorityFactor     float32 `toml:"low_priority_factor" json:"low_priority_factor"`
+	MediumPriorityFactor  float32 `toml:"medium_priority_factor" json:"medium_priority_factor"`
+	HighPriorityFactor    float32 `toml:"high_priority_factor" json:"high_priority_factor"`
+	Period                int     `toml:"period" json:"period"`
 }
 
 func (cfg *postgresConfig) GetConnectionString() string {

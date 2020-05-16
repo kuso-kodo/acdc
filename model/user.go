@@ -5,5 +5,6 @@ type User struct {
 	UserName string   `gorm:"unique" json:"username"`
 	Password string   `json:"-"`
 	Phone    string   `gorm:"unique" json:"phone"`
+	Priority int      `json:"priority"`
 	Tickets  []Ticket `json:"-" gorm:"foreignkey:UserRefer;association_foreignkey:UserID"`
 }
