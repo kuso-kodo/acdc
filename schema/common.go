@@ -2,13 +2,13 @@ package schema
 
 import "github.com/gin-gonic/gin"
 
-type CommonFailureSchema struct {
+type CommonStatusSchema struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
 
-func NewCommonFailureSchema(c *gin.Context, status int, message string) {
-	response := CommonFailureSchema{
+func NewCommonStatusSchema(c *gin.Context, status int, message string) {
+	response := CommonStatusSchema{
 		Code:    status,
 		Message: message,
 	}

@@ -22,7 +22,7 @@ func getJWTMiddleware(authorizator JWTAuthorizator, authenticator JWTAuthenticat
 		Realm:           config.GetConfig().JWTConfig.Title,
 		Key:             []byte(config.GetConfig().JWTConfig.Key),
 		Timeout:         time.Hour * 300,
-		MaxRefresh:      time.Hour * 24,
+		MaxRefresh:      time.Hour * 300,
 		IdentityKey:     "id",
 		PayloadFunc:     payloadFunc,
 		IdentityHandler: handler,
@@ -66,9 +66,10 @@ func getJWTAdminMiddleWare(authorizator JWTAuthorizator) *jwt.GinJWTMiddleware {
 		if v, ok := data.(model.Admin); ok {
 			payload, err := json.Marshal(v)
 			if err != nil {
-				log.Panicln(err)
+				log.Println(err)
 			}
 			return jwt.MapClaims{
+				"admin":   true,
 				"payload": string(payload),
 			}
 		}
@@ -76,18 +77,27 @@ func getJWTAdminMiddleWare(authorizator JWTAuthorizator) *jwt.GinJWTMiddleware {
 	}
 	adminHandler := func(c *gin.Context) interface{} {
 		claims := jwt.ExtractClaims(c)
-		user := model.Admin{}
+		user := model.Admin{UserID: 0}
+		if claims["admin"].(bool) == false {
+			return user
+		}
 		err := json.Unmarshal([]byte(claims["payload"].(string)), &user)
 		if err != nil {
 			log.Panicln(err)
 		}
 		return user
 	}
-	return getJWTMiddleware(authorizator, adminAuthenticator, adminPayloadFunc, adminHandler)
+	adminAuthorizator := func(data interface{}, c *gin.Context) bool {
+		if data.(model.Admin).UserID == 0 {
+			return false
+		}
+		return authorizator(data, c)
+	}
+	return getJWTMiddleware(adminAuthorizator, adminAuthenticator, adminPayloadFunc, adminHandler)
 }
 
 func getJWTUserMiddleWare(authorizator JWTAuthorizator) *jwt.GinJWTMiddleware {
-	adminAuthenticator := func(c *gin.Context) (interface{}, error) {
+	userAuthenticator := func(c *gin.Context) (interface{}, error) {
 		var authLoginRequest schema.AuthLoginRequest
 		if err := c.ShouldBind(&authLoginRequest); err != nil {
 			return "", jwt.ErrMissingLoginValues
@@ -103,28 +113,38 @@ func getJWTUserMiddleWare(authorizator JWTAuthorizator) *jwt.GinJWTMiddleware {
 
 		return nil, jwt.ErrFailedAuthentication
 	}
-	adminPayloadFunc := func(data interface{}) jwt.MapClaims {
+	userPayloadFunc := func(data interface{}) jwt.MapClaims {
 		if v, ok := data.(model.User); ok {
 			payload, err := json.Marshal(v)
 			if err != nil {
-				log.Panicln(err)
+				log.Println(err)
 			}
 			return jwt.MapClaims{
+				"admin":   false,
 				"payload": string(payload),
 			}
 		}
 		return jwt.MapClaims{}
 	}
-	adminHandler := func(c *gin.Context) interface{} {
+	userHandler := func(c *gin.Context) interface{} {
 		claims := jwt.ExtractClaims(c)
-		user := model.User{}
+		user := model.User{UserID: 0}
+		if claims["admin"].(bool) == true {
+			return user
+		}
 		err := json.Unmarshal([]byte(claims["payload"].(string)), &user)
 		if err != nil {
-			log.Panicln(err)
+			log.Println(err)
 		}
 		return user
 	}
-	return getJWTMiddleware(authorizator, adminAuthenticator, adminPayloadFunc, adminHandler)
+	userAuthorizator := func(data interface{}, c *gin.Context) bool {
+		if data.(model.User).UserID == 0 {
+			return false
+		}
+		return authorizator(data, c)
+	}
+	return getJWTMiddleware(userAuthorizator, userAuthenticator, userPayloadFunc, userHandler)
 }
 
 func JWTUserAuthenticator() *jwt.GinJWTMiddleware {

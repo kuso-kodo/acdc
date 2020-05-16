@@ -44,7 +44,7 @@
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/schema.CommonFailureSchema"
+              "$ref": "#/definitions/schema.CommonStatusSchema"
             }
           }
         }
@@ -71,13 +71,13 @@
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/schema.CommonFailureSchema"
+              "$ref": "#/definitions/schema.CommonStatusSchema"
             }
           }
         }
       }
     },
-    "/admin/user/all": {
+    "/superuser/all": {
       "get": {
         "security": [
           {
@@ -101,7 +101,7 @@
         }
       }
     },
-    "/admin/user/delete": {
+    "/superuser/delete": {
       "post": {
         "security": [
           {
@@ -142,7 +142,7 @@
         }
       }
     },
-    "/admin/user/new": {
+    "/superuser/new": {
       "post": {
         "security": [
           {
@@ -237,7 +237,7 @@
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/schema.CommonFailureSchema"
+              "$ref": "#/definitions/schema.CommonStatusSchema"
             }
           }
         }
@@ -264,7 +264,7 @@
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/schema.CommonFailureSchema"
+              "$ref": "#/definitions/schema.CommonStatusSchema"
             }
           }
         }
@@ -294,13 +294,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/schema.CommonFailureSchema"
+              "$ref": "#/definitions/schema.CommonStatusSchema"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/schema.CommonFailureSchema"
+              "$ref": "#/definitions/schema.CommonStatusSchema"
             }
           }
         }
@@ -344,13 +344,79 @@
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/schema.CommonFailureSchema"
+              "$ref": "#/definitions/schema.CommonStatusSchema"
             }
           },
           "403": {
             "description": "Forbidden",
             "schema": {
-              "$ref": "#/definitions/schema.CommonFailureSchema"
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          }
+        }
+      }
+    },
+    "/user/ticket/clear": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "List all unpaid tickets.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          }
+        }
+      }
+    },
+    "/user/ticket/fee": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "List all unpaid tickets.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/schema.UserTotalFeeResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/schema.CommonStatusSchema"
             }
           }
         }
@@ -366,7 +432,7 @@
         "produces": [
           "application/json"
         ],
-        "summary": "List all tickets.",
+        "summary": "List all unpaid tickets.",
         "parameters": [
           {
             "type": "integer",
@@ -394,13 +460,13 @@
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/schema.CommonFailureSchema"
+              "$ref": "#/definitions/schema.CommonStatusSchema"
             }
           },
           "403": {
             "description": "Forbidden",
             "schema": {
-              "$ref": "#/definitions/schema.CommonFailureSchema"
+              "$ref": "#/definitions/schema.CommonStatusSchema"
             }
           }
         }
@@ -480,7 +546,7 @@
       }
     },
     "schema.AddNewAdminResponse": {
-      "$ref": "#/definitions/schema.CommonFailureSchema"
+      "$ref": "#/definitions/schema.CommonStatusSchema"
     },
     "schema.AuthLoginRequest": {
       "type": "object",
@@ -507,7 +573,7 @@
         }
       }
     },
-    "schema.CommonFailureSchema": {
+    "schema.CommonStatusSchema": {
       "type": "object",
       "properties": {
         "code": {
@@ -527,7 +593,7 @@
       }
     },
     "schema.DeleteAdminResponse": {
-      "$ref": "#/definitions/schema.CommonFailureSchema"
+      "$ref": "#/definitions/schema.CommonStatusSchema"
     },
     "schema.UserRegisterRequest": {
       "type": "object",
@@ -540,6 +606,14 @@
         },
         "username": {
           "type": "string"
+        }
+      }
+    },
+    "schema.UserTotalFeeResponse": {
+      "type": "object",
+      "properties": {
+        "fee": {
+          "type": "number"
         }
       }
     }

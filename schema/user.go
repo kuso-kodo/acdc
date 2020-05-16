@@ -5,3 +5,7 @@ type UserRegisterRequest struct {
 	Password string `json:"password"`
 	Phone    string `json:"phone"`
 }
+
+type UserTotalFeeResponse struct {
+	Fee float32 `json:"fee"`
+}

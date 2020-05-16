@@ -15,7 +15,7 @@ import (
 // @Produce  json
 // @Param userRequest body schema.AuthLoginRequest true "User request"
 // @Success 200 {object} schema.AuthLoginResponse
-// @Failure 401 {object} schema.CommonFailureSchema
+// @Failure 401 {object} schema.CommonStatusSchema
 // @Router /user/login [post]
 func Login(c *gin.Context) {
 	// Note that the username is phone. Not the real user name.
@@ -26,13 +26,13 @@ func Login(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param userRequest body schema.UserRegisterRequest true "User request"
-// @Success 200 {object} schema.CommonFailureSchema
-// @Failure 401 {object} schema.CommonFailureSchema
+// @Success 200 {object} schema.CommonStatusSchema
+// @Failure 401 {object} schema.CommonStatusSchema
 // @Router /user/register [post]
 func Register(c *gin.Context) {
 	var userReq schema.UserRegisterRequest
 	if err := c.ShouldBind(&userReq); err != nil {
-		schema.NewCommonFailureSchema(c, http.StatusForbidden, "Incomplete user information.")
+		schema.NewCommonStatusSchema(c, http.StatusForbidden, "Incomplete user information.")
 		return
 	}
 	userInfo := model.User{
@@ -42,10 +42,10 @@ func Register(c *gin.Context) {
 	}
 	err := db.GetDataBase().Create(&userInfo).Error
 	if err != nil {
-		schema.NewCommonFailureSchema(c, http.StatusForbidden, err.Error())
+		schema.NewCommonStatusSchema(c, http.StatusForbidden, err.Error())
 		return
 	}
-	schema.NewCommonFailureSchema(c, http.StatusOK, "Done.")
+	schema.NewCommonStatusSchema(c, http.StatusOK, "Done.")
 }
 
 // @Summary List all users.
@@ -63,14 +63,12 @@ func GetAllUser(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce json
 // @Success 200 {object} model.User
-// @Failure 401 {object} schema.CommonFailureSchema
+// @Failure 401 {object} schema.CommonStatusSchema
 // @Router /user/me [get]
 func GetCurrentUser(c *gin.Context) {
-	user, err := service.GetUserFromClaims(c)
-	if err != nil {
-		return
-	}
-	c.JSON(http.StatusOK, user)
+	service.UserHandlerWrapper(c, func(c *gin.Context, user model.User) {
+		c.JSON(http.StatusOK, user)
+	})
 }
 
 func BindUserRouters(router *gin.RouterGroup) {

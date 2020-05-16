@@ -2,14 +2,12 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/name1e5s/acdc/config"
 	"github.com/name1e5s/acdc/db"
 	"github.com/name1e5s/acdc/middleware"
 	"github.com/name1e5s/acdc/model"
 	"github.com/name1e5s/acdc/schema"
 	"github.com/name1e5s/acdc/service"
 	"net/http"
-	"strconv"
 )
 
 // @Summary List all tickets.
@@ -18,64 +16,69 @@ import (
 // @Param offset query integer false "Page Count"
 // @Produce json
 // @Success 200 {array} model.Ticket
-// @Failure 401 {object} schema.CommonFailureSchema
-// @Failure 403 {object} schema.CommonFailureSchema
+// @Failure 401 {object} schema.CommonStatusSchema
+// @Failure 403 {object} schema.CommonStatusSchema
 // @Router /user/ticket/all [get]
 func GetAllTicket(c *gin.Context) {
-	user, err := service.GetUserFromClaims(c)
-	if err != nil {
-		return
-	}
-	pageSize, err := strconv.Atoi(c.DefaultQuery("page_size", strconv.Itoa(config.GetConfig().TicketConfig.PageSize)))
-	if err != nil {
-		schema.NewCommonFailureSchema(c, http.StatusForbidden, "Wrong query type.")
-		return
-	}
-	offset, err := strconv.Atoi(c.DefaultQuery("offset", strconv.Itoa(1)))
-	if err != nil {
-		schema.NewCommonFailureSchema(c, http.StatusForbidden, "Wrong query type.")
-		return
-	}
-	var tickets []model.Ticket
-	err = db.GetDataBase().Where("user_refer = ?", user.UserID).Limit(pageSize).Offset((offset - 1) * pageSize).Find(&tickets).Error
-	if err != nil {
-		schema.NewCommonFailureSchema(c, http.StatusForbidden, err.Error())
-		return
-	}
-	c.JSON(http.StatusOK, tickets)
+	service.UserHandlerWrapper(c, func(c *gin.Context, user model.User) {
+		pageSize, offset, err := service.GetQuerySizeAndOffset(c)
+		if err != nil {
+			schema.NewCommonStatusSchema(c, http.StatusForbidden, "Wrong query type.")
+			return
+		}
+		service.GetAllTicketByUserID(c, user.UserID, pageSize, offset)
+	})
 }
 
-// @Summary List all tickets.
+// @Summary List all unpaid tickets.
 // @Security ApiKeyAuth
 // @Param page_size query integer false "Page Size""
 // @Param offset query integer false "Page Count"
 // @Produce json
 // @Success 200 {array} model.Ticket
-// @Failure 401 {object} schema.CommonFailureSchema
-// @Failure 403 {object} schema.CommonFailureSchema
+// @Failure 401 {object} schema.CommonStatusSchema
+// @Failure 403 {object} schema.CommonStatusSchema
 // @Router /user/ticket/unpaid [get]
 func GetUnpaidTicket(c *gin.Context) {
-	user, err := service.GetUserFromClaims(c)
-	if err != nil {
-		return
-	}
-	pageSize, err := strconv.Atoi(c.DefaultQuery("page_size", strconv.Itoa(config.GetConfig().TicketConfig.PageSize)))
-	if err != nil {
-		schema.NewCommonFailureSchema(c, http.StatusForbidden, "Wrong query type.")
-		return
-	}
-	offset, err := strconv.Atoi(c.DefaultQuery("offset", strconv.Itoa(1)))
-	if err != nil {
-		schema.NewCommonFailureSchema(c, http.StatusForbidden, "Wrong query type.")
-		return
-	}
-	var tickets []model.Ticket
-	err = db.GetDataBase().Where("user_refer = ?", user.UserID).Where("paid = ?", false).Limit(pageSize).Offset((offset - 1) * pageSize).Find(&tickets).Error
-	if err != nil {
-		schema.NewCommonFailureSchema(c, http.StatusForbidden, err.Error())
-		return
-	}
-	c.JSON(http.StatusOK, tickets)
+	service.UserHandlerWrapper(c, func(c *gin.Context, user model.User) {
+		pageSize, offset, err := service.GetQuerySizeAndOffset(c)
+		if err != nil {
+			schema.NewCommonStatusSchema(c, http.StatusForbidden, "Wrong query type.")
+			return
+		}
+		service.GetUnpaidTicketByUserID(c, user.UserID, pageSize, offset)
+	})
+}
+
+// @Summary List total fee.
+// @Security ApiKeyAuth
+// @Produce json
+// @Success 200 {object} schema.UserTotalFeeResponse
+// @Failure 401 {object} schema.CommonStatusSchema
+// @Failure 403 {object} schema.CommonStatusSchema
+// @Router /user/ticket/fee [get]
+func GetTotalFee(c *gin.Context) {
+	service.UserHandlerWrapper(c, func(c *gin.Context, user model.User) {
+		service.GetTotalFeeByUserID(c, user.UserID)
+	})
+}
+
+// @Summary Clear all unpaid tickets.
+// @Security ApiKeyAuth
+// @Produce json
+// @Success 200 {object} schema.CommonStatusSchema
+// @Failure 401 {object} schema.CommonStatusSchema
+// @Failure 403 {object} schema.CommonStatusSchema
+// @Router /user/ticket/clear [POST]
+func ClearUnpaidTicket(c *gin.Context) {
+	service.UserHandlerWrapper(c, func(c *gin.Context, user model.User) {
+		err := db.GetDataBase().Model(model.Ticket{}).Where("user_refer = ?", user.UserID).Where("paid = ?", false).Update("paid", true).Error
+		if err != nil {
+			schema.NewCommonStatusSchema(c, http.StatusForbidden, err.Error())
+			return
+		}
+		schema.NewCommonStatusSchema(c, http.StatusOK, "Done.")
+	})
 }
 
 func BindTicketRouters(router *gin.RouterGroup) {
@@ -83,4 +86,6 @@ func BindTicketRouters(router *gin.RouterGroup) {
 	ticketGroup.Use(middleware.JWTUserAuthenticator().MiddlewareFunc())
 	ticketGroup.GET("/all", GetAllTicket)
 	ticketGroup.GET("/unpaid", GetUnpaidTicket)
+	ticketGroup.GET("/fee", GetTotalFee)
+	ticketGroup.POST("/clear", ClearUnpaidTicket)
 }

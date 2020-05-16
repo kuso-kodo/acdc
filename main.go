@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/name1e5s/acdc/api"
-	v1 "github.com/name1e5s/acdc/api/admin"
+	"github.com/name1e5s/acdc/api/superuser"
 	"github.com/name1e5s/acdc/config"
 	"github.com/name1e5s/acdc/db"
 	_ "github.com/name1e5s/acdc/docs"
@@ -35,7 +35,7 @@ func main() {
 	defer db.CloseDataBase()
 
 	r := gin.Default()
-	r.Group("a").Group("b").GET("/test", v1.GetAllAdmin)
+	r.Group("a").Group("b").GET("/test", superuser.GetAllAdmin)
 	apiRouter := r.Group("api")
 	api.BindAPIRouters(apiRouter)
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

@@ -6,10 +6,10 @@ type AddNewAdminRequest struct {
 	Role     uint   `json:"role"`
 }
 
-type AddNewAdminResponse CommonFailureSchema
+type AddNewAdminResponse CommonStatusSchema
 
 type DeleteAdminRequest struct {
 	UserName string `json:"username"`
 }
 
-type DeleteAdminResponse CommonFailureSchema
+type DeleteAdminResponse CommonStatusSchema
