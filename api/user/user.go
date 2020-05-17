@@ -69,7 +69,9 @@ func GetAllUser(c *gin.Context) {
 // @Router /user/me [get]
 func GetCurrentUser(c *gin.Context) {
 	service.UserHandlerWrapper(c, func(c *gin.Context, user model.User) {
-		c.JSON(http.StatusOK, user)
+		currUser := &model.User{UserID: 0}
+		db.GetDataBase().Where("user_id = ?", user.UserID).First(&currUser)
+		c.JSON(http.StatusOK, currUser)
 	})
 }
 

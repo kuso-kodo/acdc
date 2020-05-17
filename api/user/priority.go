@@ -26,7 +26,7 @@ func SetPriority(c *gin.Context) {
 			schema.NewCommonStatusSchema(c, http.StatusForbidden, err.Error())
 			return
 		}
-		err = db.GetDataBase().Model(model.User{}).Where("user_id = ?", user.UserID).Update("priority", level).Error
+		err = db.GetDataBase().Debug().Model(model.User{}).Where("user_id = ?", user.UserID).Update("priority", level).Error
 		if err != nil {
 			schema.NewCommonStatusSchema(c, http.StatusForbidden, err.Error())
 			return

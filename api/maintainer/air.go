@@ -56,13 +56,7 @@ func SetAirConfig(c *gin.Context) {
 // @Failure 403 {object} schema.CommonStatusSchema
 // @Router /maintainer/config [get]
 func GetAirConfig(c *gin.Context) {
-	var config config.AirConfig
-	if err := c.ShouldBind(&config); err != nil {
-		schema.NewCommonStatusSchema(c, http.StatusForbidden, "Incomplete information.")
-		return
-	}
-	air.GetAir().SetConfig(config)
-	schema.NewCommonStatusSchema(c, http.StatusOK, "Done.")
+	c.JSON(http.StatusOK, air.GetAir().GetConfig())
 }
 
 func BindAirRouters(router *gin.RouterGroup) {

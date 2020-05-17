@@ -30,6 +30,12 @@ func GetAir() *Air {
 	return air
 }
 
+func (a *Air) GetConfig() config.AirConfig {
+	a.RLock()
+	defer a.RUnlock()
+	return a.config
+}
+
 func (a *Air) SetConfig(config config.AirConfig) {
 	a.Lock()
 	a.config = config
