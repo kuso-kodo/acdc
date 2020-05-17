@@ -51,7 +51,7 @@ func CheckIn(c *gin.Context) {
 func CheckOut(c *gin.Context) {
 	service.ReceptionistHandlerWrapper(c, func(c *gin.Context, userID uint) {
 		service.GetCheckInCheckOutMap().CheckOut(userID)
-		err := db.GetDataBase().Model(model.Ticket{}).Where("user_refer = ?", userID).Where("paid = ?", false).Update("user_refer", 0).Error
+		err := db.GetDataBase().Model(model.Ticket{}).Where("user_refer = ?", userID).Update("user_refer", 0).Error
 		if err != nil {
 			schema.NewCommonStatusSchema(c, http.StatusForbidden, err.Error())
 			return
