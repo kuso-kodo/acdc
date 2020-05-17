@@ -184,16 +184,16 @@ paths:
   /admin/login:
     post:
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - description: User request
-          in: body
-          name: userRequest
-          required: true
-          schema:
-            $ref: '#/definitions/schema.AuthLoginRequest'
+      - description: User request
+        in: body
+        name: userRequest
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AuthLoginRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -207,7 +207,7 @@ paths:
   /admin/me:
     get:
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -218,21 +218,21 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Get current user info.
   /heartbeat:
     post:
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - description: Client request
-          in: body
-          name: clientRequest
-          required: true
-          schema:
-            $ref: '#/definitions/schema.ClientHeartBeatRequest'
+      - description: Client request
+        in: body
+        name: clientRequest
+        required: true
+        schema:
+          $ref: '#/definitions/schema.ClientHeartBeatRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -242,7 +242,7 @@ paths:
   /maintainer/config:
     get:
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -257,20 +257,20 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Get air config.
     post:
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - description: User request
-          in: body
-          name: airConfig
-          required: true
-          schema:
-            $ref: '#/definitions/config.AirConfig'
+      - description: User request
+        in: body
+        name: airConfig
+        required: true
+        schema:
+          $ref: '#/definitions/config.AirConfig'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -285,12 +285,12 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Set air config.
   /maintainer/power/off:
     post:
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -308,7 +308,7 @@ paths:
   /maintainer/power/on:
     post:
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -326,7 +326,7 @@ paths:
   /maintainer/room:
     get:
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -343,21 +343,21 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: List all rooms.
   /receptionist/checkin:
     post:
       parameters:
-        - description: User phone number
-          in: query
-          name: phone
-          type: string
-        - description: Room name
-          in: query
-          name: room
-          type: string
+      - description: User phone number
+        in: query
+        name: phone
+        type: string
+      - description: Room name
+        in: query
+        name: room
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -372,17 +372,17 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Check in user.
   /receptionist/checkout:
     post:
       parameters:
-        - description: User phone number
-          in: query
-          name: phone
-          type: string
+      - description: User phone number
+        in: query
+        name: phone
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -397,25 +397,25 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Check out user.
   /receptionist/ticket/all:
     get:
       parameters:
-        - description: User phone number
-          in: query
-          name: phone
-          type: string
-        - description: Page Size
-          in: query
-          name: page_size
-          type: integer
-        - description: Page Count
-          in: query
-          name: offset
-          type: integer
+      - description: User phone number
+        in: query
+        name: phone
+        type: string
+      - description: Page Size
+        in: query
+        name: page_size
+        type: integer
+      - description: Page Count
+        in: query
+        name: offset
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -432,17 +432,17 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: List all tickets by user phone.
   /receptionist/ticket/clear:
     post:
       parameters:
-        - description: User phone number
-          in: query
-          name: phone
-          type: string
+      - description: User phone number
+        in: query
+        name: phone
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -457,17 +457,17 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Clear all unpaid tickets.
   /receptionist/ticket/fee:
     get:
       parameters:
-        - description: User phone number
-          in: query
-          name: phone
-          type: string
+      - description: User phone number
+        in: query
+        name: phone
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -482,25 +482,25 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: List total fee.
   /receptionist/ticket/unpaid:
     get:
       parameters:
-        - description: User phone number
-          in: query
-          name: phone
-          type: string
-        - description: Page Size
-          in: query
-          name: page_size
-          type: integer
-        - description: Page Count
-          in: query
-          name: offset
-          type: integer
+      - description: User phone number
+        in: query
+        name: phone
+        type: string
+      - description: Page Size
+        in: query
+        name: page_size
+        type: integer
+      - description: Page Count
+        in: query
+        name: offset
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -517,21 +517,21 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: List all tickets by user phone.
   /register:
     post:
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - description: Client request
-          in: body
-          name: clientRequest
-          required: true
-          schema:
-            $ref: '#/definitions/schema.ClientRegisterRequest'
+      - description: Client request
+        in: body
+        name: clientRequest
+        required: true
+        schema:
+          $ref: '#/definitions/schema.ClientRegisterRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -541,7 +541,7 @@ paths:
   /superuser/all:
     get:
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -550,21 +550,21 @@ paths:
               $ref: '#/definitions/model.Admin'
             type: array
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: List all users.
   /superuser/delete:
     post:
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - description: User request
-          in: body
-          name: userInfo
-          required: true
-          schema:
-            $ref: '#/definitions/schema.DeleteAdminRequest'
+      - description: User request
+        in: body
+        name: userInfo
+        required: true
+        schema:
+          $ref: '#/definitions/schema.DeleteAdminRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -575,21 +575,21 @@ paths:
           schema:
             $ref: '#/definitions/schema.DeleteAdminResponse'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Delete a user.
   /superuser/new:
     post:
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - description: User request
-          in: body
-          name: userRequest
-          required: true
-          schema:
-            $ref: '#/definitions/schema.AddNewAdminRequest'
+      - description: User request
+        in: body
+        name: userRequest
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AddNewAdminRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -600,12 +600,12 @@ paths:
           schema:
             $ref: '#/definitions/schema.AddNewAdminResponse'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Add a new user.
   /user/all:
     get:
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -622,21 +622,21 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: List all users.
   /user/login:
     post:
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - description: User request
-          in: body
-          name: userRequest
-          required: true
-          schema:
-            $ref: '#/definitions/schema.AuthLoginRequest'
+      - description: User request
+        in: body
+        name: userRequest
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AuthLoginRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -650,7 +650,7 @@ paths:
   /user/me:
     get:
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -661,17 +661,17 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Get current user info.
   /user/priority:
     post:
       parameters:
-        - description: Priority Level
-          in: query
-          name: level
-          type: string
+      - description: Priority Level
+        in: query
+        name: level
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -686,21 +686,21 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Set user priority.
   /user/register:
     post:
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - description: User request
-          in: body
-          name: userRequest
-          required: true
-          schema:
-            $ref: '#/definitions/schema.UserRegisterRequest'
+      - description: User request
+        in: body
+        name: userRequest
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UserRegisterRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -714,16 +714,16 @@ paths:
   /user/ticket/all:
     get:
       parameters:
-        - description: Page Size
-          in: query
-          name: page_size
-          type: integer
-        - description: Page Count
-          in: query
-          name: offset
-          type: integer
+      - description: Page Size
+        in: query
+        name: page_size
+        type: integer
+      - description: Page Count
+        in: query
+        name: offset
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -740,12 +740,12 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: List all tickets.
   /user/ticket/fee:
     get:
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -760,21 +760,21 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: List total fee.
   /user/ticket/unpaid:
     get:
       parameters:
-        - description: Page Size
-          in: query
-          name: page_size
-          type: integer
-        - description: Page Count
-          in: query
-          name: offset
-          type: integer
+      - description: Page Size
+        in: query
+        name: page_size
+        type: integer
+      - description: Page Count
+        in: query
+        name: offset
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -791,7 +791,7 @@ paths:
           schema:
             $ref: '#/definitions/schema.CommonStatusSchema'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: List all unpaid tickets.
 securityDefinitions:
   ApiKeyAuth:
