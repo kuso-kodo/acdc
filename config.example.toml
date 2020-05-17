@@ -15,8 +15,5 @@ password = "114514"
 title = "JWT Middleware"
 key = "excited"
 
-[hotel]
-max_room = 114514
-
 [ticket]
 page_size = 20

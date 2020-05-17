@@ -17,7 +17,6 @@ type serverConfig struct {
 	RootUser     rootUserConfig `toml:"root"`
 	JWTConfig    jwtConfig      `toml:"jwt"`
 	TicketConfig ticketConfig   `toml:"ticket"`
-	HotelConfig  hotelConfig    `toml:"hotel"`
 	AirConfig    AirConfig      `toml:"air"`
 }
 
@@ -41,10 +40,6 @@ type jwtConfig struct {
 
 type ticketConfig struct {
 	PageSize int `toml:"page_size"`
-}
-
-type hotelConfig struct {
-	MaxRoom int `toml:"max_room"`
 }
 
 type AirConfig struct {

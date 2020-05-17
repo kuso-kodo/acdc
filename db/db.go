@@ -1,7 +1,6 @@
 package db
 
 import (
-	"encoding/json"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/name1e5s/acdc/config"
@@ -36,18 +35,18 @@ func autoMigrate(db *gorm.DB) {
 	db.AutoMigrate(&model.Ticket{})
 
 	// Add our root user
-	db.Create(&model.Admin{
+	db.FirstOrCreate(&model.Admin{
 		UserName: config.GetConfig().RootUser.UserName,
 		Password: config.GetConfig().RootUser.Password,
 		Role:     model.SuperUserMask,
 	})
 	// Add placeholders
-	db.Create(&model.User{
+	db.FirstOrCreate(&model.User{
 		UserName: "root",
 		Password: "----",
 		Phone:    "0000",
 	})
-	db.Create(&model.Room{
+	db.FirstOrCreate(&model.Room{
 		RoomName:           "root",
 		IsPowerOn:          false,
 		IsServicing:        false,
@@ -56,7 +55,7 @@ func autoMigrate(db *gorm.DB) {
 		FanSpeed:           0,
 		LastOnTime:         time.Time{},
 	})
-	db.Create(&model.Ticket{
+	db.FirstOrCreate(&model.Ticket{
 		StartAt:      time.Now(),
 		EndAt:        time.Now(),
 		ServiceCount: 0,
@@ -65,14 +64,6 @@ func autoMigrate(db *gorm.DB) {
 		RoomRefer:    1,
 		UserRefer:    1,
 	})
-	var ticket []model.Ticket
-	var cnt int
-	db.Debug().Model(&model.Room{
-		RoomID: 1,
-	}).Association("Tickets").Find(&ticket)
-	data, _ := json.Marshal(ticket)
-	log.Println(string(data))
-	log.Println(cnt)
 }
 
 func CloseDataBase() {
