@@ -43,15 +43,15 @@ func generateTicket(task *Task, reason int) {
 
 	userID, _ := service.GetCheckInCheckOutMap().FindUserByRoom(task.RoomID)
 	ticket := model.Ticket{
-		StartAt:      task.LastModifiedTime,
-		EndAt:        time.Now(),
-		ServiceCount: task.CurrentServiceCount,
-		FanSpeed:     task.FanSpeed,
-		TotalFee:     calculateFee(task),
-		RoomRefer:    task.RoomID,
-		UserRefer:    userID,
-		Paid:         false,
-		Shutdown: shutdown,
+		StartAt:         task.LastModifiedTime,
+		EndAt:           time.Now(),
+		ServiceCount:    task.CurrentServiceCount,
+		FanSpeed:        task.FanSpeed,
+		TotalFee:        calculateFee(task),
+		RoomRefer:       task.RoomID,
+		UserRefer:       userID,
+		Paid:            false,
+		Shutdown:        shutdown,
 		PriorityChanged: priorityChanged,
 		FanSpeedChanged: fanSpeedChanged,
 	}

@@ -48,7 +48,7 @@ func GetQueryPriority(c *gin.Context) (int, error) {
 }
 
 func GetQueryTime(c *gin.Context) (time.Time, time.Time, error) {
-	startTime, err := time.Parse(time.RFC3339, c.DefaultQuery("start", time.Now().AddDate(0,0,-1).Format(time.RFC3339)))
+	startTime, err := time.Parse(time.RFC3339, c.DefaultQuery("start", time.Now().AddDate(0, 0, -1).Format(time.RFC3339)))
 	if err != nil {
 		return time.Now(), time.Now(), err
 	}
