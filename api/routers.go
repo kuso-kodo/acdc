@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/name1e5s/acdc/api/accounting"
 	"github.com/name1e5s/acdc/api/admin"
 	"github.com/name1e5s/acdc/api/client"
 	"github.com/name1e5s/acdc/api/maintainer"
@@ -17,4 +18,5 @@ func BindAPIRouters(router *gin.RouterGroup) {
 	receptionist.BindAPIRouters(router)
 	maintainer.BindAPIRouters(router)
 	client.BindAPIRouters(router)
+	accounting.BindRouters(router)
 }

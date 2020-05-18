@@ -20,5 +20,7 @@ type Ticket struct {
 	RoomRefer    uint      `json:"-"`
 	UserRefer    uint      `json:"-"`
 	Paid         bool      `json:"paid"`
-	Reason       int       `json:"-"`
+	Shutdown       uint       `json:"-"`
+	FanSpeedChanged uint `json:"-"`
+	PriorityChanged uint `json:"-"`
 }

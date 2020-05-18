@@ -14,6 +14,56 @@
     "host": "localhost:8080",
     "basePath": "/api",
     "paths": {
+        "/accounting/report": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get report.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Start date.",
+                        "name": "start",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "End date.",
+                        "name": "end",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Report"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schema.CommonStatusSchema"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/schema.CommonStatusSchema"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/login": {
             "post": {
                 "consumes": [
@@ -1045,6 +1095,35 @@
                     "type": "integer"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Report": {
+            "type": "object",
+            "properties": {
+                "fan": {
+                    "type": "integer"
+                },
+                "fee": {
+                    "type": "number"
+                },
+                "power": {
+                    "type": "integer"
+                },
+                "priority": {
+                    "type": "integer"
+                },
+                "room": {
+                    "type": "string"
+                },
+                "service": {
+                    "type": "integer"
+                },
+                "ticket": {
+                    "type": "integer"
+                },
+                "total_time": {
                     "type": "string"
                 }
             }

@@ -6,6 +6,7 @@ import (
 	"github.com/name1e5s/acdc/model"
 	"github.com/name1e5s/acdc/schema"
 	"net/http"
+	"time"
 )
 
 func GetAllTicketByUserID(c *gin.Context, userID uint, pageSize int, offset int) {
@@ -50,4 +51,13 @@ func GetTotalFeeByRoomID(roomID uint) float32 {
 		result += value.TotalFee
 	}
 	return result
+}
+
+func GetResultsByTime(startTime, endTime time.Time) ([]model.Report, error) {
+	var result []model.Report
+	err := db.GetDataBase().Table("tickets").Select("(select room_name from rooms as T where T.room_id = room_refer) as room_name, sum(end_at - start_at) as total_time, sum(service_count) as service, count(*) as ticket, sum(fan_speed_changed) as fan, sum(shutdown) as power, sum(priority_changed) as priority, sum(total_fee) as fee").Where("room_refer <> ?", 1).Where("end_at between ? and ?", startTime, endTime).Group("room_refer").Scan(&result).Error
+	if err != nil {
+		return nil, err
+	}
+	return result, err
 }

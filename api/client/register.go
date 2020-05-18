@@ -26,10 +26,11 @@ func Register(c *gin.Context) {
 		})
 		return
 	}
-	err := db.GetDataBase().Create(&model.Room{
+	room := &model.Room{
 		RoomName:   registerRequest.Room,
 		LastOnTime: time.Now(),
-	}).Error
+	}
+	err := db.GetDataBase().FirstOrCreate(&room).Error
 	if err != nil {
 		c.JSON(http.StatusOK, schema.ClientRegisterResponse{
 			Status:  false,

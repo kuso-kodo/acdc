@@ -30,6 +30,17 @@ func calculateFee(task *Task) float32 {
 }
 
 func generateTicket(task *Task, reason int) {
+	var shutdown uint = 0
+	var priorityChanged uint = 0
+	var fanSpeedChanged uint = 0
+	if reason == model.ReasonShutDown {
+		shutdown = 1
+	} else if reason == model.ReasonFanSpeedChanged {
+		fanSpeedChanged = 1
+	} else if reason == model.ReasonPriorityChanged {
+		priorityChanged = 1
+	}
+
 	userID, _ := service.GetCheckInCheckOutMap().FindUserByRoom(task.RoomID)
 	ticket := model.Ticket{
 		StartAt:      task.LastModifiedTime,
@@ -40,7 +51,9 @@ func generateTicket(task *Task, reason int) {
 		RoomRefer:    task.RoomID,
 		UserRefer:    userID,
 		Paid:         false,
-		Reason:       reason,
+		Shutdown: shutdown,
+		PriorityChanged: priorityChanged,
+		FanSpeedChanged: fanSpeedChanged,
 	}
 	db.GetDataBase().Create(&ticket)
 }

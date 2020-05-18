@@ -28,6 +28,25 @@ definitions:
       username:
         type: string
     type: object
+  model.Report:
+    properties:
+      fan:
+        type: integer
+      fee:
+        type: number
+      power:
+        type: integer
+      priority:
+        type: integer
+      room:
+        type: string
+      service:
+        type: integer
+      ticket:
+        type: integer
+      total_time:
+        type: string
+    type: object
   model.Room:
     properties:
       current_temperature:
@@ -181,6 +200,37 @@ info:
   title: 305E API
   version: "1.0"
 paths:
+  /accounting/report:
+    get:
+      parameters:
+      - description: Start date.
+        in: query
+        name: start
+        type: string
+      - description: End date.
+        in: query
+        name: end
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Report'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/schema.CommonStatusSchema'
+      security:
+      - ApiKeyAuth: []
+      summary: Get report.
   /admin/login:
     post:
       consumes:

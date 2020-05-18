@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/name1e5s/acdc/config"
 	"strconv"
+	"time"
 )
 
 func GetQuerySizeAndOffset(c *gin.Context) (int, int, error) {
@@ -44,4 +45,16 @@ func GetQueryPriority(c *gin.Context) (int, error) {
 		return 0, errors.New("unknown level")
 	}
 	return level, nil
+}
+
+func GetQueryTime(c *gin.Context) (time.Time, time.Time, error) {
+	startTime, err := time.Parse(time.RFC3339, c.DefaultQuery("start", time.Now().AddDate(0,0,-1).Format(time.RFC3339)))
+	if err != nil {
+		return time.Now(), time.Now(), err
+	}
+	endTime, err := time.Parse(time.RFC3339, c.DefaultQuery("start", time.Now().Format(time.RFC3339)))
+	if err != nil {
+		return time.Now(), time.Now(), err
+	}
+	return startTime, endTime, nil
 }
